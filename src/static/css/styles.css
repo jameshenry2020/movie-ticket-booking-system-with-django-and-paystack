@@ -1,0 +1,322 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans&family=Fjalla+One&family=Lobster&family=Open+Sans:wght@300&family=Orelega+One&family=PT+Serif&family=Roboto+Condensed:wght@300&display=swap');
+
+body{
+    padding: 0;
+    margin: 0;
+    font-size: 16px;
+    color: #dbe2fb;
+    line-height: 28px;
+    overflow-x: hidden;
+    font-family: Open sans sans-serif ;
+    background: #001232;
+}
+.overlay{
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 4;
+    display: none;
+}
+.header-section{
+    border-bottom: 1px solid rgba(255, 255, 255, 0.102);
+    padding: 6px 0;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    left: 0;
+    z-index: 99;
+}
+.header-section.nav-active{
+    background: #0a1e5e;
+    border: none;
+}
+.wrapper{
+    display:  flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.logo{
+    width: 224px;
+    
+    font-family: 'Lobster', cursive;
+}
+.menu{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.banner-section {
+    padding: 250px 0 316px;
+    position: relative;
+    display: block;
+    box-sizing: border-box;
+}
+.banner-section::before {
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background: rgba(0, 18, 50, 0.4);
+    z-index: 2;
+}
+.banner-section .banner-img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    /* opacity: .5; */
+    background-image: url(../images/movies-bg.jpg);
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+}
+
+.menu li {
+    padding: 5px 12px;
+    position: relative;
+    list-style: none;
+}
+.menu li a{
+    color: #e9eeff;
+    font-size: 16px;
+    font-weight: 700;
+    text-transform: uppercase;
+    display: inline-block;
+    text-decoration: none;
+    text-transform: uppercase;
+}
+.logo a{
+    text-decoration: none;
+    color: #fff;
+}
+.banner-content .title {
+    font-size: 80px;
+    line-height: 1.1;
+    text-transform: uppercase;
+    margin-bottom: 18px;
+    font-weight: 800;
+}
+.banner-content .title span{
+    display:  inline-block;
+    padding: 0.2em 0;
+}
+.banner-content{
+    margin: 0 auto;
+    padding-top: 250px;
+    text-align: center;
+    max-width: 940px;
+    position: relative;
+    z-index: 3;
+}
+.movie-card{
+    outline: none;
+    border: none;
+    overflow: hidden;
+    background-color: #032055 !important;
+    margin-bottom: 20px;
+}
+.movie-content{
+    background-color: #032055 !important;
+    color: #fff !important;
+}
+.card-title{
+    font-size: 1.2rem !important;
+    font-family: 'Open Sans', sans-serif !important;
+
+}
+.intro{
+    margin-bottom: 20px;
+    border-bottom: 1px solid #1a2a47;
+    padding-bottom: 10px;
+    padding-left: 10px;   
+}
+.intro-text{
+    text-transform: uppercase;
+    font-size: 30px;
+    line-height: 60px;
+    padding-top: 20px;
+    font-weight: 800;
+    font-family: 'Open Sans', sans-serif;
+}
+.movie-img{
+    transition: .5s;
+}
+.movie-img:hover{
+   transform: scale(1.04);
+   cursor: pointer;
+   
+}
+.footer-section{
+    /* position: absolute; */
+    /* bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%; */
+
+}
+.footer-top {
+    display: flex;
+    justify-content: space-between;
+    padding-top: 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 20px;
+}
+.footer-top > * {
+    padding-bottom: 10px;
+    margin-bottom: 0;
+}
+.footer-top .logo{
+   font-size: 2rem;
+   font-weight: 700;
+   font-family: 'Lobster', cursive;
+}
+.social-icons {
+    margin: -7.5px;
+
+}
+.social-icons li {
+    padding: 7.5px;
+    list-style: none;
+}
+.social-icons li a {
+    width: 38px;
+    height: 38px;
+    line-height: 30px;
+    padding: 7px;
+    text-align: center;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+    font-size: 14px;
+    text-decoration: none;
+}
+.social-icons li a:hover{
+    background: rgb(76, 243, 229);
+}
+.footer-bottom {
+    padding: 25px 0;
+}
+.footer-bottom-area{
+    position: relative;
+    z-index: 1;
+}
+.footer-bottom-area .left{
+    margin-bottom: 25px;
+}
+.left p{
+    font-size: 1rem;
+    font-family: 'Open Sans', sans-serif;
+}
+.left p a{
+    text-decoration: none;
+    color: rgb(52, 197, 223);
+}
+.footer-bottom-area .links{
+    margin-bottom: 25px;
+}
+.footer-bottom .links li {
+    padding: 0 15px;
+    list-style: none;
+}
+.footer-bottom .links li a {
+    color: #dbe2fb;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1.5rem;
+}
+.detail-section{
+    position: relative;
+    margin: 100px 0;
+    height: 100vh;
+}
+.movie-info h3{
+    font-size: 2rem;
+    font-family: 'Fjalla One', sans-serif;
+    text-transform: uppercase;
+}
+.movie-info p{
+    font-size: 1rem;
+    font-family: 'Open Sans', sans-serif;
+    line-height: 2rem;
+    word-spacing: 2px;
+
+}
+.movie-info .genre{
+    text-transform: uppercase;
+    font-family: 'DM Sans', sans-serif;
+    color: #07c1ce;
+    font-weight: 600;
+}
+.movie-info .cast{
+    font-family: 'DM Sans', sans-serif;
+    color: #fff;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+}
+.movie-info .cast span{
+    text-transform: uppercase;
+    color: #07c1ce;
+}
+.movie-info p span{
+    margin-right: 2px;
+}
+.checked {
+    color: rgb(12, 185, 156);
+}
+.custom{
+    border: 2px solid #dbe2fb !important;
+    background-color: transparent !important;
+    color: #fff !important;
+    border-radius: 8px !important;
+}
+.custom .item{
+    font-size: 14px !important;
+    line-height: 18px !important;
+    padding: 0 10px !;
+    margin-bottom: 12px !important;
+    color: #52526c !important;
+    font-weight: 400 !important;
+}
+
+.booking-wrapper{
+   position: relative;
+   width: 100%;
+   height: 80vh;
+   margin-top: 100px;
+   min-height: 100%;
+}
+.booking-summary{
+    padding: 30px;
+    border: 1px solid #11326f;
+    border-bottom-style: dashed;
+    padding-bottom: 10px;
+    background-color: #032055;
+}
+.booking-summary .title{
+    text-align: center;
+    border-bottom: 1px dashed #11326f;
+    padding-bottom: 23px;
+    margin-bottom: 35px;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-family: 'DM Sans', sans-serif;
+}
+.h-text{
+    font-weight: 600;
+    font-family: 'DM Sans', sans-serif;
+    text-transform: capitalize;
+}
+.total{
+    display: flex;
+    justify-content: space-between;
+}
+.total > p{
+    font-weight: 600;
+    font-size: 1.5rem;
+}

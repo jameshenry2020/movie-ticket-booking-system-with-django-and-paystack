@@ -1,0 +1,63 @@
+{%extends "base.html"%}
+{%load static%}
+
+
+{%block content%}
+<section class="booking-wrapper">
+<div class="container">
+    
+    <div class="row">
+        <div class="col-md-8 my-5">
+           <div class="form-container py-4" id="formBox">
+            <h3>Who's Going ?</h3>
+           <form action="" method="post">
+                {%csrf_token %}
+                <div class="row">
+                   <div class="form-group col-md-6">
+                    {{form.name.label}}
+                    {{form.name}}
+                   </div>   
+                     <div class="form-group col-md-6">
+                       {{form.email.label}}
+                       {{form.email}}
+                     </div>              
+                </div>
+                <div class="form-group col-md-12 mb-2">
+                    {{form.gender.label}}
+                    {{form.gender}}
+                </div>
+                <div class="form-group">
+                <button class="btn btn-primary">Save</button>
+                </div>
+           </form>
+           <div class="guest my-4">
+               {%if number_of_ticket > 1%}
+                <input type="checkbox" hx-get="{%url 'audience_form'%}" hx-target="#formBox" hx-swap="outerHTML" hx-trigger="click" name="send_to_guest" class="form-check-input" value="">
+                 <label for="">Send ticket to guest(s) </label>
+               {%endif%}
+           </div>
+           </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="booking-summary">
+                  <h4 class="title">Booking Summary </h4>
+                  <ul class="list-group list-group-flush">
+                    <li class="list-group-item h-text mb-2">{{movie_obj.title}}</li>
+                    <li class="list-group-item mb-3">H & K Cinemas</li>
+                    <li class="list-group-item mb-2">{{number_of_ticket}} guests</li>
+                    <li class="list-group-item">{{date_ch|date}}|<span class="mr-2"> {{time_ch|time:"g i A"}}</span></li>
+                    
+                  </ul>
+                  <div class="total">
+                      <p>Total</p>
+                      <p>#{{total_charge}}</p>
+                  </div>
+            </div>
+        </div>
+        
+    </div>
+</div>
+</section>
+
+{%endblock content%}

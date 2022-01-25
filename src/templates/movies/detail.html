@@ -1,0 +1,113 @@
+{%extends "base.html"%}
+{%load static%}
+
+{%block content %}
+   <section class="detail-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <img src="{{movie_obj.movies_art.url}}" alt="movie image" style="width: 100%; height: 90%;">
+                </div>
+                <div class="col-md-6">
+                    <div class="movie-info">
+                        <h3>{{movie_obj.title}}</h3>
+                        <p class="genre">Genre: <span>{{movie_obj.genre}}</span></p>
+                        <p>{{movie_obj.description}}</p>
+                        <p>release date: {{movie_obj.release_date|date:"d F Y"}}</p>
+                        <p class="cast"><span>Casts: </span>{{movie_obj.casts}}</p>
+                        <p><span>{{movie_obj.duration}}</span>  | <span>rating:
+                            <span class='fa fa-star {% if movie_obj.rating < 1 %}  {%else%}checked {% endif %}'></span>
+                            <span class="fa fa-star {% if movie_obj.rating < 2 %}  {%else%} checked {% endif %}"></span>
+                            <span class="fa fa-star {% if movie_obj.rating < 3 %}  {%else%} checked {% endif %}"></span>
+                            <span class="fa fa-star {% if movie_obj.rating < 4 %}  {%else%} checked {% endif %}"></span>
+                            <span class="fa fa-star {% if movie_obj.rating < 5 %} {%else%} checked {% endif %}"></span> </span> </p>
+                        <p>price: #{{movie_obj.view_price}}/tkt</p>
+                    </div>
+                    <div class="form-container container">  
+                    <form action="" method="post">
+                        {%csrf_token%}  
+                    <div class="row mt-5 py-4">    
+                        <div class="col-md-4">
+                            <label for="dateSelect" class="form-label">Date</label>
+                            <select class="form-select custom" name="date-picked" aria-label="Default select example" id="dateSelect" required>
+                                <option selected>choose a date</option>
+                                {%for dt in movie_obj.view_date.all%}
+                                <option value="{{dt.id}}" class="item">{{dt.date|date:"d-m-y"}}</option>
+                                {%endfor%}
+
+   
+                                </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="dateSelect" class="form-label">Time</label>
+                            <select class="form-select custom" name="time-picked" aria-label="Default select example" id="timeSelect">
+                                <option selected class="text-muted" id="defaultSelect">choose a time</option>
+                              
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="ticketSelect" class="form-label">Number of Ticket</label>
+                            <select class="form-select custom" name="ticket-numb" aria-label="Default select example" id="ticketSelect" required>
+                                <option selected>ticket quantity</option>
+                                <option value="1" class="item">1</option>
+                                <option value="2" class="item">2</option>
+                                <option value="3" class="item">3</option>
+                                <option value="4" class="item">4</option>
+                                <option value="5" class="item">5</option>
+                                </select>
+                           </div>  
+                       </div>
+                       <button type="submit" class="btn btn-outline-info btn-lg">Book Now</button>
+                   </form>
+                   </div>
+                    
+                </div>
+            </div>
+        </div>
+   </section>
+{%endblock content%}
+
+
+{% block extra_script%}
+<script>
+   const dateInput=document.getElementById('dateSelect')
+   const timeInput=document.getElementById('timeSelect')
+   const defaultext=document.getElementById('defaultSelect')
+
+   function tConvert12(time24) {
+        var ts = time24;
+        var H = +ts.substr(0, 2);
+        var h = (H % 12) || 12;
+        h = (h < 10)?("0"+h):h;  // leading 0 at the left for 1 digit hours
+        var ampm = H < 12 ? " AM" : " PM";
+        ts = h + ts.substr(2, 3) + ampm;
+        return ts;
+};
+   dateInput.addEventListener('change', e=>{
+      const movie_date= e.target.value
+      const movie_id='{{movie_obj.id}}'
+
+      timeInput.innerHTML=""
+
+      
+      $.ajax({
+          type:'GET',
+          url:`showtime/${movie_date}/`,
+          success:function(response){
+              console.log(response.data)
+              const timeData=response.data
+              timeData.map(item =>{
+                  const option=document.createElement('option')
+                     option.text=tConvert12(item.watch_time)
+                     option.setAttribute('value', item.id)
+                     option.setAttribute('class','item')
+                     timeInput.appendChild(option)
+              })
+          },
+          error:function(error){
+              console.log(error)
+          }
+      })
+   })
+</script>
+{%endblock extra_script%}

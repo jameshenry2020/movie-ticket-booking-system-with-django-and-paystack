@@ -1,0 +1,26 @@
+
+
+<form action="" method="post">
+    {%csrf_token%}
+    {{audienceFormset.management_form}}
+    {%for form in audienceFormset%}
+        <h4>Guest Information {{forloop.counter}}</h4>
+        
+        <div class="row">
+            <div class="form-group col-md-6">
+                   {{form.name.label}}
+                   {{form.name}}         
+            </div>
+            <div class="form-group col-md-6">
+                   {{form.email.label}}
+                   {{form.email}}           
+           </div>
+        </div>
+        <div class="form-group col-md-12 mb-2">
+            {{form.gender.label}}
+            {{form.gender}}
+        </div>
+       
+    {%endfor%}
+    <input type="submit" class="btn btn-primary px-4 py-2" value="Next">
+</form>

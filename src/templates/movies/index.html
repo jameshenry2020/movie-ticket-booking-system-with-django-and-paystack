@@ -1,0 +1,43 @@
+{%extends "base.html"%}
+{%load static%}
+
+
+{%block banner %}
+<section class="banner-section">
+    <div class="banner-img bg_img bg_fixed">
+        <div class="container">
+            <div class="banner-content">
+                <h1 class="title">Book your <br> <span class="sub_heading"> Ticket for Movies </span> </h1>
+            </div>
+        </div>
+    </div>
+</section>
+
+{%endblock banner%}
+
+
+{%block content %}
+<div class="intro container">
+    <h1 class="intro-text">Showing Now In Cinemas</h1>
+</div>
+<div class="container">
+    <div class="row">
+       {%for obj in object_list %}
+        <div class="col-sm-4">
+            <a href="{{obj.get_absolute_url}}" style="text-decoration: none;">
+            <div class="card movie-card" style="width: 20rem;">
+                <img src="{{obj.movies_art.url}}" class="card-img-top movie-img" alt="movie thumbnail" style="height: 25rem;">
+            <div class="card-body movie-content">
+                <h2 class="card-title">
+                    {{obj.title}}
+                </h2>
+            </div>
+            </div>
+            </a>
+        </div>
+        {% endfor %}
+       
+    </div>
+</div>
+
+{%endblock content%}
