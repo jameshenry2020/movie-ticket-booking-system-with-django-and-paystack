@@ -68,6 +68,7 @@ class TicketBooking(models.Model):
     daybooked=models.DateField(blank=True, null=True)
     timebooked=models.CharField(max_length=20, blank=True, null=True)
     is_booked=models.BooleanField(default=False)
+    num_of_tickets=models.IntegerField(default=0)
     date=models.DateTimeField(auto_now_add=True)
     status=models.CharField(max_length=10, choices=STATUS_CHOICE)
     guest_unique_code=models.CharField(max_length=30, unique=True)

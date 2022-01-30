@@ -1,0 +1,43 @@
+{%extends "base.html"%}
+{%load static%}
+
+
+{%block content%}
+<div class="container mt-5 py-5">
+    <div class="card mx-auto" style="width:25rem">
+         <div class="card-header">
+           ticket booking transaction Details 
+         </div>
+         <div class="card-body">
+          <table class="table">
+            <tbody> 
+                <tr>
+                    <td colspan="2">Movie Name:</td>
+                    <td>{{ booking_obj.movie.title }}</td>               
+                </tr>
+                <tr>
+                    <td colspan="2">Date</td>
+                    <td>{{ booking_obj.daybooked }}</td>               
+                </tr>
+                <tr>
+                    <td colspan="2">ShowTime</td>
+                    <td>{{ booking_obj.timebooked }}</td>               
+                </tr>   
+              <tr>
+                <td colspan="2">number of guest</td>
+                <td>{{booking_obj.num_of_ticket}}</td>
+              </tr>
+             
+              <tr>
+                <td colspan="2">Total Amount</td>
+                <td>NGN {{booking_obj.amount}}</td>
+              </tr>
+            </tbody>
+          </table>
+           
+            <button class="btn btn-success btn-block">Pay Now</button>
+         </div>
+    </div>
+</div>
+
+{%endblock content%}

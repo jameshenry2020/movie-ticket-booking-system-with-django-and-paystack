@@ -39,7 +39,8 @@ class MovieDetailView(View):
             amt=int(price) * int(ticket)
             chosen_date=showtime.watch_date.date
             chosen_time=showtime.watch_time
-            booking=TicketBooking.objects.create(movie=movie, amount=amt, daybooked=chosen_date, timebooked=chosen_time, status="pending", guest_unique_code=self.guest_code)
+            ticket_num=int(ticket)
+            booking=TicketBooking.objects.create(movie=movie, amount=amt, daybooked=chosen_date, timebooked=chosen_time, num_of_ticket=ticket_num, status="pending", guest_unique_code=self.guest_code)
             request.session['guest_unique_code']=booking.guest_unique_code
              
             return redirect('audience-info', movie_id=movie_id)
