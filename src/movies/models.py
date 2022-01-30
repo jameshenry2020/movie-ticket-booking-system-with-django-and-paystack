@@ -1,6 +1,8 @@
-import email
+import secrets
+from tokenize import Triple
 from django.urls import reverse
 from django.db import models
+
 
 # Create your models here.
 class WatchDay(models.Model):
@@ -53,14 +55,37 @@ class Audience(models.Model):
     def __str__(self):
         return self.name
 
+STATUS_CHOICE=(
+    ('pending','pending'),
+    ('decline','decline'),
+    ('success','success'),
+)
 
-class TicketBought(models.Model):
-    # movie=
-    # guest=
-    # amount=
-    # ticket=
-    # completed=
-    # date=
-    pass
+class TicketBooking(models.Model):
+    movie=models.ForeignKey(Movies, on_delete=models.CASCADE)
+    guest=models.ManyToManyField(Audience)
+    amount=models.CharField(max_length=200)
+    daybooked=models.DateField(blank=True, null=True)
+    timebooked=models.CharField(max_length=20, blank=True, null=True)
+    is_booked=models.BooleanField(default=False)
+    date=models.DateTimeField(auto_now_add=True)
+    status=models.CharField(max_length=10, choices=STATUS_CHOICE)
+    guest_unique_code=models.CharField(max_length=30, unique=True)
+    reference_code=models.CharField(max_length=50, blank=True, null=True)
+
+    def __str__(self):
+        return f"{self.movie.title}-booking-{self-id}"
+    
+    def save(self, *args, **kwargs):
+        while not self.reference_code:
+            ref=secrets.token_urlsafe(50)
+            check_similar_ref=TicketBooking.objects.filter(reference_code=ref)
+            if not check_similar_ref:
+                self.reference_code=ref
+        return super().save(*args, **kwargs)
+
+    def paystack_amount_value(self):
+        return int(self.amount) * 100
+
 
 
