@@ -1,11 +1,13 @@
 from django.utils.crypto import get_random_string
 from django.forms.formsets import formset_factory
-from django.http import HttpResponse, JsonResponse
+from django.http import  JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views import View
+from django.conf import settings
 from django.views.generic import ListView
 from .forms import AddAudienceForm
 from movies.models import Movies, ShowTime,TicketBooking
+from movies.paystack import PayStack
 # Create your views here.
 
 class MovieHomeView(ListView):
@@ -94,7 +96,7 @@ class AudienceCredentialsView(View):
                     audience_instance=form.save(commit=False)
                     audience_instance.movie=movie
                     audience_instance.save()
-                    get_booking.guest.add(audience_instance)
+                    get_booking.guests.add(audience_instance)
                     return redirect('payment', movie_id=movie_id )
             return render(request, "movies/audience.html", context)
         else:
@@ -116,9 +118,36 @@ class PaymentView(View):
         guest_code=request.session.get('guest_unique_code')
         ticket=TicketBooking.objects.get(movie=movie, is_booked=False, guest_code=guest_code)
         context={
-            'booking_obj':ticket
+            'booking_obj':ticket,
+            'paystack_public_key':settings.PAYSTACK_PUBLIC_KEY
         }
         return render(request, "movies/payment.html", context)
+
+
+
+
+#verify payment callback handle
+def payment_verification(request, ref):
+    booking=get_object_or_404(TicketBooking, reference_code=ref)
+    payment=PayStack()
+    status, result=payment.verify_payment(ref)
+    if status:
+        booking.is_booked=True
+        booking.save()
+        for gt in booking.guests.all():
+            pass
+            #send an email to each guest 
+        return redirect('success')
+    return redirect('ticket-payment', movie_id=booking.movie.id)
+    
+
+        
+def booking_success(request):
+    
+    return render(request, 'movie/success.html')
+
+
+
 
 #utility views
 def get_json_showtime_data(request, *args, **kwargs):

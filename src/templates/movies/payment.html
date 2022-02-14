@@ -34,10 +34,43 @@
               </tr>
             </tbody>
           </table>
-           
-            <button class="btn btn-success btn-block">Pay Now</button>
+             <form id="paymentForm">
+                 <input type="email" placeholder="enter your email" id="payer_email" name="email" class="form-control">
+                <button type="submit" onclick="PayWithPaystack()" class="btn btn-success btn-block">Pay Now</button>
+             </form>
+            
          </div>
     </div>
 </div>
 
 {%endblock content%}
+
+{% block extra_script%}
+<script src="https://js.paystack.co/v1/inline.js"></script> 
+<script>
+    const paymentForm = document.getElementById('paymentForm');
+    paymentForm.addEventListener("submit", PayWithPaystack, false);
+    function PayWithPaystack(e){
+        e.preventDefault();
+        var handler = PaystackPop.setup({
+        key: '{{paystack_public_key}}', // Replace with your public key
+        email:document.getElementById('payer_email').value ,
+        amount: "{{booking_obj.amount}}", 
+        currency: 'NGN',
+        ref:'{{booking_obj.reference_code}}', 
+        channels:['card','mobile_money'],
+        callback: function(response) {
+            //this happens after the payment is completed successfully
+            window.location.href="{%url 'verify-payment' booking_obj.reference_code %}"
+        },
+        onClose: function() {
+            alert('Transaction was not completed, window closed.');
+        },
+        });
+        handler.openIframe();
+
+    }
+</script>
+
+
+{%endblock extra_script%}

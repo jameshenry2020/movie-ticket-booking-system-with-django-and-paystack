@@ -1,7 +1,8 @@
 import secrets
 from tokenize import Triple
-from django.urls import reverse
+
 from django.db import models
+from django.urls import reverse
 
 
 # Create your models here.
@@ -61,10 +62,11 @@ STATUS_CHOICE=(
     ('success','success'),
 )
 
+
 class TicketBooking(models.Model):
     movie=models.ForeignKey(Movies, on_delete=models.CASCADE)
-    guest=models.ManyToManyField(Audience)
-    amount=models.CharField(max_length=200)
+    guests=models.ManyToManyField(Audience)
+    amount=models.IntegerField(default=0)
     daybooked=models.DateField(blank=True, null=True)
     timebooked=models.CharField(max_length=20, blank=True, null=True)
     is_booked=models.BooleanField(default=False)
