@@ -61,7 +61,7 @@
         channels:['card','mobile_money'],
         callback: function(response) {
             //this happens after the payment is completed successfully
-            window.location.href="{%url 'verify-payment' booking_obj.reference_code %}"
+            window.location.href="{% url 'verify' booking_obj.reference_code %}"
         },
         onClose: function() {
             alert('Transaction was not completed, window closed.');

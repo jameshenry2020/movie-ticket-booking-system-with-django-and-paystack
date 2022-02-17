@@ -1,4 +1,4 @@
-import secrets
+﻿import secrets
 from tokenize import Triple
 
 from django.db import models
@@ -73,7 +73,7 @@ class TicketBooking(models.Model):
     num_of_tickets=models.IntegerField(default=0)
     date=models.DateTimeField(auto_now_add=True)
     status=models.CharField(max_length=10, choices=STATUS_CHOICE)
-    guest_unique_code=models.CharField(max_length=30, unique=True)
+    guest_unique_code=models.CharField(max_length=30, unique=True, null=True, blank=True)
     reference_code=models.CharField(max_length=50, blank=True, null=True)
 
     def __str__(self):

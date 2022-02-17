@@ -4,13 +4,13 @@ import requests
 
 
 class PayStack:
-    PAYSTACK_SECRET_KEY=settings.PAYSTACK_SECRET_KEY
+    PAYSTACK_KEY=settings.PAYSTACK_SECRET_KEY
     base_url='https://api.paystack.co'
 
     def verify_payment(self, ref, *args, **kwargs):
         path=f"/transaction/verify/{ref}"
         headers={
-            "Authorization":f"Bearer {self.PAYSTACK_SECRET_KEY}",
+            "Authorization":f"Bearer {self.PAYSTACK_KEY}",
             "Content-Type":"application/json"
         }
         url=self.base_url + path

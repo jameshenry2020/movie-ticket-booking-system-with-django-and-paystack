@@ -1,6 +1,6 @@
 from django.utils.crypto import get_random_string
 from django.forms.formsets import formset_factory
-from django.http import  JsonResponse
+from django.http import  HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views import View
 from django.conf import settings
@@ -127,25 +127,12 @@ class PaymentView(View):
 
 
 #verify payment callback handle
-def payment_verification(request, ref):
-    booking=get_object_or_404(TicketBooking, reference_code=ref)
-    payment=PayStack()
-    status, result=payment.verify_payment(ref)
-    if status:
-        booking.is_booked=True
-        booking.save()
-        for gt in booking.guests.all():
-            pass
-            #send an email to each guest 
-        return redirect('success')
-    return redirect('ticket-payment', movie_id=booking.movie.id)
+def payment_verification(request, ref_code):
+    booking=get_object_or_404(TicketBooking, reference_code=ref_code)
     
 
-        
-def booking_success(request):
     
-    return render(request, 'movie/success.html')
-
+  
 
 
 
