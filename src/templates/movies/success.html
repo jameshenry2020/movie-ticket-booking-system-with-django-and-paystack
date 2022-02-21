@@ -2,9 +2,9 @@
 {%load static%}
 
 {%block content %}
-<div class="container mx-auto">
-    <h3>thanks for booking a ticket for moviename </h3>
-    <p>am email of your ticket Details has been sent please show that message at the cinema extrance.</p>
+<div class="container mx-auto my-4 mt-5 pt-5">
+    <h3>thanks for booking a ticket to see the movie: {{movie_obj.title}} </h3>
+    <p>am email of your ticket Details has been sent to your mail. please show that message at the cinema extrance.</p>
 </div>
 
 {% endblock content %}

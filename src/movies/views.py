@@ -42,16 +42,16 @@ class MovieDetailView(View):
             chosen_date=showtime.watch_date.date
             chosen_time=showtime.watch_time
             ticket_num=int(ticket)
-            booking=TicketBooking.objects.create(movie=movie, amount=amt, daybooked=chosen_date, timebooked=chosen_time, num_of_ticket=ticket_num, status="pending", guest_unique_code=self.guest_code)
+            booking=TicketBooking.objects.create(movie=movie, amount=amt, daybooked=chosen_date, timebooked=chosen_time, num_of_tickets=ticket_num, status="pending", guest_unique_code=self.guest_code)
+
             request.session['guest_unique_code']=booking.guest_unique_code
              
             return redirect('audience-info', movie_id=movie_id)
         return render(request, "movies/detail.html", self.context)
         
 
-# view to collect booking audience info and show selected date and time
+# view to collect booking audience info from multiple guests and show selected date and time
 class AudienceCredentialsView(View):
-    send_to_guest=False
     def get(self, request, *args, **kwargs):
         movie_id=kwargs['movie_id']
         movie=get_object_or_404(Movies, id=movie_id)
@@ -88,35 +88,31 @@ class AudienceCredentialsView(View):
             'form':empty_form
              
         }
-        if num_ticket > 1:
-            AudienceFormSet=formset_factory(AddAudienceForm, extra=num_ticket)
-            audience_forms_submits=AudienceFormSet(request.POST or None)
-            if audience_forms_submits.is_valid():
-                for form in audience_forms_submits:
-                    audience_instance=form.save(commit=False)
-                    audience_instance.movie=movie
-                    audience_instance.save()
-                    get_booking.guests.add(audience_instance)
-                    return redirect('payment', movie_id=movie_id )
-            return render(request, "movies/audience.html", context)
-        else:
-            form_submit=AddAudienceForm(request.POST or None)
-            if form_submit.is_valid():
-                instance=form_submit.save(commit=False)
-                instance.movie=movie
-                instance.save()
-                return redirect('payment', movie_id=movie_id)
+        
+        AudienceFormSet=formset_factory(AddAudienceForm, extra=num_ticket)
+        audience_forms_submits=AudienceFormSet(request.POST or None)
+        if audience_forms_submits.is_valid():
+            for form in audience_forms_submits:
+                audience_instance=form.save(commit=False)
+                audience_instance.movie=movie
+                audience_instance.save()
+                get_booking.guests.add(audience_instance)
+            return redirect('payment', movie_id=movie_id )
         return render(request, "movies/audience.html", context)
+        
+           
+        
                 
 
 
 
+# paystack payment initialisation view
 class PaymentView(View):
     def get(self, request, *args, **kwargs):
         movie_id=kwargs['movie_id']
         movie=get_object_or_404(Movies, pk=movie_id)
         guest_code=request.session.get('guest_unique_code')
-        ticket=TicketBooking.objects.get(movie=movie, is_booked=False, guest_code=guest_code)
+        ticket=TicketBooking.objects.get(movie=movie, is_booked=False, guest_unique_code=guest_code)
         context={
             'booking_obj':ticket,
             'paystack_public_key':settings.PAYSTACK_PUBLIC_KEY
@@ -129,6 +125,25 @@ class PaymentView(View):
 #verify payment callback handle
 def payment_verification(request, ref_code):
     booking=get_object_or_404(TicketBooking, reference_code=ref_code)
+    paystack=PayStack()
+    stats, result=paystack.verify_payment(ref_code)
+    if stats and result['status']=='success':
+        booking.is_booked=True
+        booking.status='success'
+        booking.save()
+        for guest in booking.guests.all():
+            #send the ticket mail to each guests
+            print('sending ticket email to guest')
+        return redirect('payment-success', movie_id=booking.movie.id) 
+    return redirect('payment', movie_id=booking.movie.id)
+
+
+def payment_success_view(request, movie_id):
+    movie=get_object_or_404(Movies, pk=movie_id)
+    context={
+        'movie_obj':movie
+    }
+    return render(request, "movies/success.html", context)
     
 
     
@@ -151,6 +166,25 @@ def create_audience_form(request):
     if num_ticket > 1:
         audience_formset=formset_factory(AddAudienceForm, extra=num_ticket)
     return render(request, "partials/_audience_form.html", {'audienceFormset':audience_formset})
+
+
+
+#processing  single audience form instance, in case where the user booking decision to receive the multiple tickets by himself
+#rather than send the ticket to the guests his booking for!
+def process_single_guests_form(request, *args, **kwargs):
+    movie_id=kwargs['movie_id']
+    guest_code=request.session.get('guest_unique_code')
+    movie=get_object_or_404(Movies, id=movie_id)
+    get_booking=TicketBooking.objects.get(guest_unique_code=guest_code, is_booked=False)
+    if request.method=="POST":
+        form_submit=AddAudienceForm(request.POST or None)
+        if form_submit.is_valid():
+            instance=form_submit.save(commit=False)
+            instance.movie=movie
+            instance.save()
+            get_booking.guests.add(instance)
+            return redirect('payment', movie_id=movie_id)
+        return redirect('audience-info', movie_id=movie_id)
 
 
 

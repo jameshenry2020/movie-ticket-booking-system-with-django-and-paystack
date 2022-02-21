@@ -10,7 +10,7 @@
         <div class="col-md-8 my-5">
            <div class="form-container py-4" id="formBox">
             <h3>Who's Going ?</h3>
-           <form action="" method="post">
+           <form action="{%url 'guest-info' movie_obj.id %}" method="post">
                 {%csrf_token %}
                 <div class="row">
                    <div class="form-group col-md-6">

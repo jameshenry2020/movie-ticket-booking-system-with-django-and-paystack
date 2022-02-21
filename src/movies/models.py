@@ -77,7 +77,7 @@ class TicketBooking(models.Model):
     reference_code=models.CharField(max_length=50, blank=True, null=True)
 
     def __str__(self):
-        return f"{self.movie.title}-booking-{self-id}"
+        return f"{self.movie.title}-booking-{self.id}"
     
     def save(self, *args, **kwargs):
         while not self.reference_code:

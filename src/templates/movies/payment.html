@@ -25,7 +25,7 @@
                 </tr>   
               <tr>
                 <td colspan="2">number of guest</td>
-                <td>{{booking_obj.num_of_ticket}}</td>
+                <td>{{booking_obj.num_of_tickets}}</td>
               </tr>
              
               <tr>
@@ -34,8 +34,9 @@
               </tr>
             </tbody>
           </table>
+          <hr>
              <form id="paymentForm">
-                 <input type="email" placeholder="enter your email" id="payer_email" name="email" class="form-control">
+                 <input type="email" placeholder="enter your email" id="payer_email" name="email" class="form-control mb-2">
                 <button type="submit" onclick="PayWithPaystack()" class="btn btn-success btn-block">Pay Now</button>
              </form>
             
@@ -55,7 +56,7 @@
         var handler = PaystackPop.setup({
         key: '{{paystack_public_key}}', // Replace with your public key
         email:document.getElementById('payer_email').value ,
-        amount: "{{booking_obj.amount}}", 
+        amount: "{{booking_obj.paystack_amount_value}}", 
         currency: 'NGN',
         ref:'{{booking_obj.reference_code}}', 
         channels:['card','mobile_money'],
