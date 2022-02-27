@@ -115,6 +115,11 @@ MEDIA_ROOT=BASE_DIR / 'media_files'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+#email configuration
+EMAIL_BACKEND='django.core.mail.backends.console.EmailBackend'
+EMAIL_HOST='smtp.gmail.com'
+EMAIL_PORT=587
+EMAIL_USER='admin@h&kcinema.com'
 
 PAYSTACK_SECRET_KEY=os.environ.get('PAYSTACK_SECRET')
 PAYSTACK_PUBLIC_KEY=os.environ.get('PAYSTACK_PUBLIC')

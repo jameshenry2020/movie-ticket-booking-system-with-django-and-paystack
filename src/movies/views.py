@@ -7,7 +7,7 @@ from django.conf import settings
 from django.views.generic import ListView
 from .forms import AddAudienceForm
 from movies.models import Movies, ShowTime,TicketBooking
-from movies.paystack import PayStack
+from movies.paystack import PayStack, send_ticket_to_customers
 # Create your views here.
 
 class MovieHomeView(ListView):
@@ -125,14 +125,18 @@ class PaymentView(View):
 #verify payment callback handle
 def payment_verification(request, ref_code):
     booking=get_object_or_404(TicketBooking, reference_code=ref_code)
+    chosen_time=request.session.get('chosen_time')
+    showtime=ShowTime.objects.get(id=chosen_time)
     paystack=PayStack()
     stats, result=paystack.verify_payment(ref_code)
     if stats and result['status']=='success':
         booking.is_booked=True
         booking.status='success'
         booking.save()
+        number_of_ticket=int(request.session.get('ticket_num'))
         for guest in booking.guests.all():
             #send the ticket mail to each guests
+            send_ticket_to_customers(guest.name, guest.movie.title, showtime.watch_date.date, showtime.watch_time, number_of_ticket,booking.amount, guest.email)
             print('sending ticket email to guest')
         return redirect('payment-success', movie_id=booking.movie.id) 
     return redirect('payment', movie_id=booking.movie.id)
